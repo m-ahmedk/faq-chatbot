@@ -85,4 +85,5 @@ public class ProductService : IProductService
         // regenerate embedding when product changes
         await _embeddingService.CreateProductEmbeddingAsync(product);
     }
+
 }

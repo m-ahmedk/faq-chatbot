@@ -1,6 +1,7 @@
-﻿using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
+﻿using FAQDemo.API.Models;
 using FAQDemo.API.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace FAQDemo.API.Data
 {
@@ -13,7 +14,8 @@ namespace FAQDemo.API.Data
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Embedding> Embeddings { get; set; }
-
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         // Autosave params with EF Core
         public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -81,6 +83,24 @@ namespace FAQDemo.API.Data
                     modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
                 }
             }
+
+            // Order -> User (many orders per user)
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.User)
+                .WithMany()
+                .HasForeignKey(o => o.UserId);
+
+            // OrderItem -> Order (many items per order)
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(i => i.Order)
+                .WithMany(o => o.Items)
+                .HasForeignKey(i => i.OrderId);
+
+            // OrderItem -> Product (many order items can reference a product)
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(i => i.Product)
+                .WithMany()
+                .HasForeignKey(i => i.ProductId);
 
             // Composite key and relationships for UserRole
             modelBuilder.Entity<UserRole>()

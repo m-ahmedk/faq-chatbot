@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using FAQDemo.API.DTOs.Product;
@@ -9,7 +8,6 @@ using FAQDemo.API.Models;
 namespace FAQDemo.API.Controllers;
 
 [Authorize(Roles = "Admin")]
-//[AllowAnonymous] // for on-going development
 [ApiController]
 [Route("api/[controller]")]
 public class ProductController : ControllerBase

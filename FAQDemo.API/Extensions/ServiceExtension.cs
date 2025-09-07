@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using FAQDemo.API.Converters;
-using FAQDemo.API.DTOs.Auth;
-using FAQDemo.API.Helpers;
 using FAQDemo.API.Repositories;
 using FAQDemo.API.Repositories.Interfaces;
 using FAQDemo.API.Services;
@@ -111,6 +107,7 @@ namespace FAQDemo.API.Extensions
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IEmbeddingRepository, EmbeddingRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
 
             return services;
         }
@@ -122,6 +119,11 @@ namespace FAQDemo.API.Extensions
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IEmbeddingService, EmbeddingService>();
             services.AddScoped<IPromptService, PromptService>();
+            services.AddScoped<IOrderService, OrderService>();
+
+            // HttpContextAccessor is required for CurrentUserService
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             return services;
         }
