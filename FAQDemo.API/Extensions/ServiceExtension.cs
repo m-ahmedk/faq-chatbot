@@ -108,6 +108,7 @@ namespace FAQDemo.API.Extensions
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IEmbeddingRepository, EmbeddingRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IFaqRepository, FaqRepository>();
 
             return services;
         }
@@ -120,6 +121,7 @@ namespace FAQDemo.API.Extensions
             services.AddScoped<IEmbeddingService, EmbeddingService>();
             services.AddScoped<IPromptService, PromptService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IFaqService, FaqService>();
 
             // HttpContextAccessor is required for CurrentUserService
             services.AddHttpContextAccessor();

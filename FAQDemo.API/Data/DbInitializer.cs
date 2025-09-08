@@ -16,6 +16,7 @@ namespace FAQDemo.API.Data
             await SeedRoles(context);
             await SeedUsers(context);
             await SeedProducts(context, embeddingService);
+            await SeedFaqs(service);
         }
 
         public async static Task SeedRoles(AppDbContext context)
@@ -121,6 +122,90 @@ namespace FAQDemo.API.Data
                 foreach (var product in products) {
                     await embeddingService.CreateProductEmbeddingAsync(product);
                     // Console.WriteLine($"[Seed] Created embedding for {product.Name}");
+                }
+            }
+        }
+
+        public async static Task SeedFaqs(IServiceProvider service)
+        {
+            using var scope = service.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var faqService = scope.ServiceProvider.GetRequiredService<IFaqService>();
+
+            if (!context.Faqs.Any())
+            {
+                var faqs = new List<Faq>
+                {
+                    new Faq
+                    {
+                        Question = "How do I register?",
+                        Answer = "Use the /api/auth/register endpoint with email and password to create an account."
+                    },
+                    new Faq
+                    {
+                        Question = "How do I log in?",
+                        Answer = "Use the /api/auth/login endpoint to receive a JWT token for authentication."
+                    },
+                    new Faq
+                    {
+                        Question = "How can I place an order?",
+                        Answer = "Send a POST request to /api/orders with product IDs and quantities to place an order."
+                    },
+                    new Faq
+                    {
+                        Question = "Can I order multiple products at once?",
+                        Answer = "Yes, you can include multiple items in the same order request to /api/orders."
+                    },
+                    new Faq
+                    {
+                        Question = "Do you ship internationally?",
+                        Answer = "Yes, worldwide shipping is supported. Delivery typically takes 3–5 business days."
+                    },
+                    new Faq
+                    {
+                        Question = "How long does shipping take?",
+                        Answer = "Shipping usually takes 3–5 business days, depending on your location."
+                    },
+                    new Faq
+                    {
+                        Question = "What payment methods do you support?",
+                        Answer = "We currently support credit card and PayPal payments."
+                    },
+                    new Faq
+                    {
+                        Question = "What is your return policy?",
+                        Answer = "Items can be returned within 30 days of purchase for a full refund."
+                    },
+                    new Faq
+                    {
+                        Question = "How do I reset my password?",
+                        Answer = "Click 'Forgot Password' on the login page to reset your password."
+                    },
+                    new Faq
+                    {
+                        Question = "Is my account secure?",
+                        Answer = "Yes, your data is protected with JWT authentication and secure password hashing."
+                    },
+                    new Faq
+                    {
+                        Question = "Can I track my orders?",
+                        Answer = "Yes, use GET /api/orders/{id} to check the status of your order."
+                    },
+                    new Faq
+                    {
+                        Question = "Can I cancel my order?",
+                        Answer = "Yes, orders can be cancelled before they are shipped using the /api/orders/cancel endpoint."
+                    },
+                    new Faq
+                    {
+                        Question = "How do I contact support?",
+                        Answer = "You can email support@example.com or use the /api/support endpoint."
+                    }
+                };
+
+                foreach (var faq in faqs)
+                {
+                    await faqService.AddAsync(faq); // generates embeddings internally
                 }
             }
         }
