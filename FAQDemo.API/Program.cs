@@ -28,7 +28,8 @@ builder.Host.UseSerilog();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-if (!builder.Environment.IsEnvironment("Test"))
+if (builder.Environment.IsEnvironment("Test")) { }
+else
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
