@@ -16,6 +16,7 @@ namespace FAQDemo.API.Data
         public DbSet<Embedding> Embeddings { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Faq> Faqs { get; set; }
 
         // Autosave params with EF Core
         public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -57,6 +58,11 @@ namespace FAQDemo.API.Data
             // Map Embedding.Vector to Postgres vector(1536)
             modelBuilder.Entity<Embedding>()
                 .Property(e => e.Vector)
+                .HasColumnType("vector(1536)");
+
+            // Enable pgvector for FAQ
+            modelBuilder.Entity<Faq>()
+                .Property(f => f.Vector)
                 .HasColumnType("vector(1536)");
 
             // REFLECTION: Get all entity types in the current model
